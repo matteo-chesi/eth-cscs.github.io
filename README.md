@@ -7,3 +7,5 @@ The Swiss National Supercomputing Centre (CSCS) is pleased to announce its 3-day
 Please visit [the course webpage](http://www.cscs.ch/events/event_detail/index.html?tx_seminars_pi1%5BshowUid%5D=155) for further information.
 
 ---
+
+# List of Installed EasyBuild packages
