@@ -12,7 +12,8 @@ It reports group usage breakdowns across the various systems, e.g.:
 
 Per-project usage at CSCS since Sun 1 January, 12am CET
 Allocation period ending Fri 31 March, 11pm CEST
- sXXX:   Authorized Daint constraints: gpu
+
+sXXX:   Authorized Daint constraints: gpu
            DAINT Usage:   yyy NODE HOURS (NH)   Quota:    zzz NH    0.0%
 
 * monthly_usage
@@ -26,7 +27,9 @@ Usage in Node hours for the Crays OR Cpu hours for all other clusters for 'sXXX'
 'DAINT'
 
 Month          Day        Usage          Total         %Usage
+
 =======  =====  =======  =======  =========
+
 [... list of the usage per day...]
 
 monthly_usage --h lists all the options you can use with this script
