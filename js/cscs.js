@@ -90,11 +90,11 @@ function cscs_setup_index_page_content(newsfile)
     });
   });
 
-  cscs_read_file_contents("https://raw.githubusercontent.com/eth-cscs/master/jenkins-builds/6.0.UP02-2016.11-gpu", function __populate_site_content(argument) {
+  cscs_read_file_contents("https://raw.githubusercontent.com/eth-cscs/production/master/jenkins-builds/6.0.UP02-2016.11-gpu", function __populate_site_content(argument) {
     document.getElementById("cscs-markdown-content").innerHTML += '<h2>Daint GPU partition</h2><pre>' + argument + '</pre>';
   });
 
-  cscs_read_file_contents("https://raw.githubusercontent.com/eth-cscs/master/jenkins-builds/6.0.UP02-2016.11-mc", function __populate_site_content(argument) {
+  cscs_read_file_contents("https://raw.githubusercontent.com/eth-cscs/production/master/jenkins-builds/6.0.UP02-2016.11-mc", function __populate_site_content(argument) {
     document.getElementById("cscs-markdown-content").innerHTML += '<h2>Daint MC partition</h2><pre>' + argument + '</pre>';
   });
 
