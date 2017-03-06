@@ -37,7 +37,8 @@ The following job script asks for 64 nodes, using 1 MPI task per node and 12 Ope
 ```
 #!/bin/bash -l
 #
-# QuantumESPRESSO on Piz Daint: 16 nodes, 36 MPI tasks per node, 2 OpenMP threads per task using hyperthreading (--ntasks-per-core=2)
+# QuantumESPRESSO on Piz Daint: 16 nodes, 36 MPI tasks per node, 
+# 2 OpenMP threads per task using hyperthreading (--ntasks-per-core=2)
 #
 #SBATCH --job-name=espresso 
 #SBATCH --time=01:00:00
