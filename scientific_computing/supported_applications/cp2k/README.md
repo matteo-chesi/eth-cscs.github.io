@@ -12,7 +12,7 @@ Key characteristics of CP2K:
 
 # Licensing Terms and Conditions
 
-The sources of CP2K are free for all users [GPL license](http://www.gnu.org/licenses/gpl.html#TOC1), and stable versions of the code are available from the [CP2K repository](http://sourceforge.net/projects/cp2k). Publications of results obtained with CP2K should acknowledge its use by an appropriate citation (see [CP2K Homepage](http://www.cp2k.org)).
+The sources of CP2K are free for all users [GPL license](http://www.gnu.org/licenses/gpl.html#TOC1) and stable versions of the code are available from the [CP2K repository](http://sourceforge.net/projects/cp2k). Publications of results obtained with CP2K should acknowledge its use by an appropriate citation (see [CP2K Homepage](http://www.cp2k.org)).
 
 # Setup
 
