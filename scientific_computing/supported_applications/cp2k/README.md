@@ -2,7 +2,7 @@
 
 CP2K is a program to perform atomistic and molecular simulations of solid state, liquid, molecular, and biological systems. It provides a general framework for different methods such as e.g., density functional theory (DFT) using a mixed Gaussian and plane waves approach (GPW) and classical pair and many-body potentials.
 
-CP2K is freely available under the GPL license. It is written in Fortran 95 and can be run efficiently in parallel.
+CP2K is freely available under the [GPL license](http://www.gnu.org/licenses/gpl.html#TOC1). It is written in Fortran 95 and can be run efficiently in parallel.
 
 Key characteristics of CP2K:
 
@@ -12,9 +12,7 @@ Key characteristics of CP2K:
 
 # Licensing Terms and Conditions
 
-The sources of CP2K are free for all users (GPL license), and stable versions of the code are available from the CP2K repository.
-
-Publications of results obtained with CP2K should acknowledge its use by an appropriate citation (see CP2K Homepage).
+The sources of CP2K are free for all users [GPL license](http://www.gnu.org/licenses/gpl.html#TOC1), and stable versions of the code are available from the [CP2K repository](http://sourceforge.net/projects/cp2k). Publications of results obtained with CP2K should acknowledge its use by an appropriate citation (see [CP2K Homepage](http://www.cp2k.org)).
 
 # Setup
 
@@ -63,6 +61,6 @@ srun -n $SLURM_NTASKS --ntasks-per-node=$SLURM_NTASKS_PER_NODE -c $SLURM_CPUS_PE
  
 # Further Documentation
 
-CP2K Homepage
+[CP2K Homepage](http://www.cp2k.org)
 
-CP2K Online Manual
+[CP2K Online Manual](http://manual.cp2k.org)
