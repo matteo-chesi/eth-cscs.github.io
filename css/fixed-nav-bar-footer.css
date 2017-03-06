@@ -23,6 +23,12 @@ body > .container {
   margin: 20px 0;
 }
 
+pre code {
+  white-space: pre;
+  word-wrap: normal;
+  overflow: scroll;
+}
+
 .footer > .container {
   padding-right: 15px;
   padding-left: 15px;

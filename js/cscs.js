@@ -78,6 +78,7 @@ function cscs_setup_markdown_page_content(markdownFile)
   });
   __cscs_mouseover_link();
   __cscs_create_toc();
+  __cscs_change_table_layout();
 }
 
 function cscs_setup_index_page_content(newsfile)
@@ -100,7 +101,7 @@ function cscs_setup_index_page_content(newsfile)
 
   __cscs_mouseover_link();
   __cscs_create_toc();
-
+  __cscs_change_table_layout();
 }
 
 
@@ -126,12 +127,12 @@ function __cscs_show_in_presenter_mode() {
 
 
 function __cscs_email_protector() {
-  $("#cscs-email-protector").prepend('<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;%69%6E%66%6F%40%63%73%63%73%2E%63%68">Contact CSCS</a>');
-  $("#cscs-email-protector").prepend('<a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#104;&#101;&#108;&#112;&#064;&#099;&#115;&#099;&#115;&#046;&#099;&#104;">Contact the User Support Team</a><br/>');
+  // $("#cscs-email-protector").prepend('<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;%69%6E%66%6F%40%63%73%63%73%2E%63%68">Contact CSCS</a>');
+  $("#cscs-email-protector").prepend('<a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#104;&#101;&#108;&#112;&#064;&#099;&#115;&#099;&#115;&#046;&#099;&#104;">Contact us</a>');
 }
 
 function __cscs_mouseover_link() {
-  
+
   $('#cscs-markdown-content').children("h1, h2").each(function(index, element) {
     $(element).hover(
         function() {
@@ -177,7 +178,6 @@ function __cscs_create_toc() {
 
 }
 
-
 // This function destroys the remark presentation and restores the CSCS website
 function __cscs_exit_presentation_mode() {
     if(document.location.domain == null)
@@ -186,3 +186,12 @@ function __cscs_exit_presentation_mode() {
       window.location.assign(document.location = document.location.domain+document.location.pathname);
 }
 
+// this function changes the layout of table inside the main side markdown area
+function __cscs_change_table_layout() {
+  $('#cscs-markdown-content').children("table").each(function(index, element) {
+    $(element).addClass('table table-striped table-bordered' );
+    $(this).wrap(function() {
+      return "<div class='table-responsive' ></a>";
+    });
+  });
+}
