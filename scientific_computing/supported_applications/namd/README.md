@@ -2,11 +2,11 @@
 
 NAMD is a parallel molecular dynamics code designed for high-performance simulation of large biomolecular systems. Based on [Charm++ parallel objects](https://charm.cs.uiuc.edu/), NAMD [scales](http://www.ks.uiuc.edu/Research/namd/performance.html) to hundreds of cores for typical simulations and uses the molecular graphics program [VMD](http://www.ks.uiuc.edu/Research/vmd/) for simulation setup and trajectory analysis, but is also file-compatible with AMBER, CHARMM, and X-PLOR.
 
-# Licensing Terms and Conditions
+## Licensing Terms and Conditions
 
 NAMD is distributed [free of charge](http://www.ks.uiuc.edu/Research/namd/license.html) with source code. Users agree to acknowledge use of NAMD in any reports or publications of results obtained with the Software (see [NAMD Homepage](http://www.ks.uiuc.edu/Research/namd/) for details). 
 
-# Setup
+## Setup
 
 You can see a list of the available versions of the program installed on the machine after loading the gpu or multicore module, by typing:
 
@@ -37,7 +37,7 @@ module show NAMD
 module help NAMD
 ```
 
-# How to Run on Piz Daint
+## How to Run on Piz Daint
 
 The CUDA-enabled version of NAMD is installed on Daint. When using this version you should set outputEnergies to 100 or higher in the simulation config file, as outputting energies from the GPU is slower compared to the CPU, and you should add +idlepoll to the command line in order to poll the GPU for results rather than sleeping while idle. Note that some features are unavailable in the CUDA build, including alchemical free energy perturbation and the Lowe-Andersen thermostat.
 
@@ -69,7 +69,7 @@ export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 srun -n $SLURM_NTASKS --ntasks-per-node=$SLURM_NTASKS_PER_NODE -c $SLURM_CPUS_PER_TASK namd2 +idlepoll +ppn $[SLURM_CPUS_PER_TASK-1] input.namd > namd.out
 ```
 
-# Further Documentation
+## Further Documentation
 
 [NAMD Homepage](http://www.ks.uiuc.edu/Research/namd/)
 
