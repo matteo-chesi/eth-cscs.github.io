@@ -9,7 +9,9 @@ CSCS provides a wide range of scientific applications: please find below useful 
 * LAMMPS
 * NAMD
 * ParaView
-* Quantum ESPRESSO
+* QuantumESPRESSO
+* Theano
+* TensorFlow
 * VASP
 * VisIt
 * VMD
