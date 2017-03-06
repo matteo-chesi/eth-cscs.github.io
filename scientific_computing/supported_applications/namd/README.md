@@ -1,3 +1,5 @@
+# NAMD
+
 NAMD is a parallel molecular dynamics code designed for high-performance simulation of large biomolecular systems. Based on [Charm++ parallel objects](https://charm.cs.uiuc.edu/), NAMD [scales](http://www.ks.uiuc.edu/Research/namd/performance.html) to hundreds of cores for typical simulations and uses the molecular graphics program [VMD](http://www.ks.uiuc.edu/Research/vmd/) for simulation setup and trajectory analysis, but is also file-compatible with AMBER, CHARMM, and X-PLOR.
 
 # Licensing Terms and Conditions
