@@ -13,7 +13,7 @@ Let us remind you that your account will be charged per node usage on most syste
 
 A basic batch script can be written just using the '--ntasks' and '--time' directives, but extra directives will give you more control on how your job is run.
 
-## Output and Error
+# Output and Error
 
 By default the output of your script will be put into a file of the form slurm-<XXXX>.out where <XXXX> is the SLURM batch job number of your job, and the error will be put into a file called slurm-<XXXX>.err with both of these being placed in the directory from which you launched the job.
 
@@ -35,7 +35,7 @@ module load slurm
 srun ./hello_world_mpi.x
 ```
 
-## Migration from Cray ALPS to native SLURM
+# Migration from Cray ALPS to native SLURM
 
 Cray systems are equipped with native SLURM: the main difference is the absence of aprun, which was replaced by the SLURM command srun. The migration from Cray ALPS (Application Level Placement Scheduler) to native SLURM is supported by the simple examples available below for the most common usage with MPI and hybrid MPI/OpenMP jobs.
 SLURM man pages (e.g man sbatch) will give useful information and more details on specific options, along with the documentation available on line at: http://slurm.schedmd.com/documentation.html.
@@ -84,7 +84,8 @@ The example above shows what needs to be done to run large MPI jobs:
 - PMI_MMAP_SYNC_WAIT_TIME and srun option --wait prevent Slurm from killing tasks that take long time to run
 - srun's option --bcast copies the binary to /tmp on all nodes before launching them. This helps task startup time.
 
-## Synoptic table
+# Synoptic table
+
 Option |	aprun | srun
 --- | --- | ---
 MPI tasks | -n | -n, --ntasks
@@ -92,5 +93,6 @@ MPI tasks per node | -N | --ntasks-per-node
 CPUs per task |	-d | -c, --cpus-per-task
 Thread/task affinity | -cc cpu |--cpu_bind=rank
 Large memory nodes | -q bigmem |--mem=120GB
+
 
 The other SLURM commands will always be the same: the list of queues and partitions is available typing sinfo or scontrol show partition, the SLURM queue can be monitored with the squeue command and the jobs saved in the SLURM database can be inspected with the sacct command.
