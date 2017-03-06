@@ -16,8 +16,7 @@ module load Visit
 
 # How to Run on Piz Daint
 
-* Batch-mode with Python scripts
-<br />
+## Batch-mode with Python scripts
 The following job script asks for 8 nodes, using 8 MPI task per node. Users will provide their Python code (e.g. file script.py) as an input to visit.
 		
 ```
@@ -38,9 +37,7 @@ module load Visit
 
 srun -n $SLURM_NTASKS -N $SLURM_NNODES -C mc --cpu_bind=sockets visit -nowin -cli -s script.py
 ```
-<br />
-* Interactive mode with a client-server connection
-<br />
+## Interactive mode with a client-server connection
 VisIt needs a host profile to connect to a remote location. You will find a profile for daint in /apps/daint/UES/6.0.UP02/VisIt/host_daint.xml and you need to copy this file to your private directory $HOME/.visit/hosts, on your desktop.
 
 When opening a remote connection, VisIt also needs to know where its executables are located. Thus, you must include the command module load Visit inside your .bashrc file such that any ssh command can find it.
@@ -48,4 +45,4 @@ Opening a parallel server is done with the following steps:
 
 * Select the menu “Open file”, select the name of the host to be “daint”. This will trigger the execution of VisIt’s mdserver on daint's loggin node. You should then have a listing of your file system
 * Select a file to open: a popup menu will let you choose the number of processors and number of nodes for your parallel job. Upon successful connection to a parallel compute server, you may verify its status with the menu "File->Compute engines".
-<br />
+
