@@ -86,7 +86,7 @@ The example above shows what needs to be done to run large MPI jobs:
 
 ## Synoptic table
 Option |	aprun | srun
-- | - | -
+--- | --- | ---
 MPI tasks | -n | -n, --ntasks
 MPI tasks per node | -N | --ntasks-per-node
 CPUs per task |	-d | -c, --cpus-per-task
