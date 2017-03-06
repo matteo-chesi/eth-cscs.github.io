@@ -57,6 +57,6 @@ srun -n $SLURM_NTASKS --ntasks-per-node=$SLURM_NTASKS_PER_NODE -c $SLURM_CPUS_PE
 
 Further Documentation
 
-VASP Homepage
+[VASP Homepage](http://www.vasp.at)
 
-VASP User Guide
+[VASP User Guide](http://cms.mpi.univie.ac.at/vasp/vasp/vasp.html)
