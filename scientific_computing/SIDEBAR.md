@@ -13,6 +13,7 @@ Scientific Computing
 ## [LAMMPS](https://eth-cscs.github.io/scientific_computing/supported_applications/lammps)
 ## [NAMD](https://eth-cscs.github.io/scientific_computing/supported_applications/namd)
 ## [ParaView](https://eth-cscs.github.io/scientific_computing/supported_applications/paraview)
+## [Python](https://eth-cscs.github.io/compiling_and_optimizing/python)
 ## [Quantum ESPRESSO](https://eth-cscs.github.io/scientific_computing/supported_applications/quantumespresso)
 ## [Theano](https://eth-cscs.github.io/scientific_computing/supported_applications/theano)
 ## [TensorFlow](https://eth-cscs.github.io/scientific_computing/supported_applications/tensorflow)
@@ -24,4 +25,3 @@ Scientific Computing
 # [Debugging tools](https://eth-cscs.github.io/compiling_and_optimizing/debugging_tools)
 # [EasyBuild framework](https://eth-cscs.github.io/compiling_and_optimizing/easybuild_framework)
 # [Performance tools](https://eth-cscs.github.io/compiling_and_optimizing/performance_tools)
-# [Python](https://eth-cscs.github.io/compiling_and_optimizing/python)

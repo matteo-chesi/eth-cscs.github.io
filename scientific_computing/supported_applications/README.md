@@ -17,6 +17,7 @@ CSCS provides a wide range of scientific applications: please follow the links o
 * [LAMMPS](lammps)
 * [NAMD](namd)
 * [ParaView](paraview)
+* [Python](python)
 * [QuantumESPRESSO](quantumespresso)
 * [TensorFlow](tensorflow)
 * [Theano](theano)
