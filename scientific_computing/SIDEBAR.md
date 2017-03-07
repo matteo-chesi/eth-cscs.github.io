@@ -12,7 +12,7 @@ Scientific Computing
 ## [LAMMPS](https://eth-cscs.github.io/scientific_computing/supported_applications/lammps)
 ## [NAMD](https://eth-cscs.github.io/scientific_computing/supported_applications/namd)
 ## [ParaView](https://eth-cscs.github.io/scientific_computing/supported_applications/paraview)
-## [Python](https://eth-cscs.github.io/scientific_computing/python)
+## [Python](https://eth-cscs.github.io/scientific_computing/supported_applications/python)
 ## [Quantum ESPRESSO](https://eth-cscs.github.io/scientific_computing/supported_applications/quantumespresso)
 ## [Theano](https://eth-cscs.github.io/scientific_computing/supported_applications/theano)
 ## [TensorFlow](https://eth-cscs.github.io/scientific_computing/supported_applications/tensorflow)
