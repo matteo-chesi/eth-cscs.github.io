@@ -17,4 +17,3 @@ Getting Started
 ## [Computing systems](https://eth-cscs.github.io/getting_started/faq/#computing-systems)
 ## [Software and Modules](https://eth-cscs.github.io/getting_started/faq/#software-and-modules)
 # [Tutorials](https://eth-cscs.github.io/getting_started/tutorials)
-# [Contact us](https://eth-cscs.github.io/getting_started/contact_us)
