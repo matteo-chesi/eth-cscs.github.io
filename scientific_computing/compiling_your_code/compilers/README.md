@@ -104,7 +104,7 @@ Debugging is turned on with "-debug [all]". Note that optimization is turned off
 
 See the man pages for detailed information on the compilers and compiler flags __(man icc, man ifort)__.  
 
-More documentation is available from Intel for the [C compiler](https://software.intel.com/en-us/intel-software-technical-documentation?field_suite_tid%255B%255D=43368) and [Fortran compiler](https://software.intel.com/en-us/fortran-compilers-support/documentation).
+More documentation is available from Intel for the [C compiler](https://software.intel.com/en-us/c-compilers) and [Fortran compiler](https://software.intel.com/en-us/fortran-compilers).
 
 ## GNU compiler
 
