@@ -15,7 +15,7 @@ Scientific Computing
 ## [ParaView](https://eth-cscs.github.io/scientific_computing/supported_applications/paraview)
 ## [Quantum ESPRESSO](https://eth-cscs.github.io/scientific_computing/supported_applications/quantumespresso)
 ## [Theano](https://eth-cscs.github.io/scientific_computing/supported_applications/theano)
-## [Tensor Flow](https://eth-cscs.github.io/scientific_computing/supported_applications/tensorflow)
+## [TensorFlow](https://eth-cscs.github.io/scientific_computing/supported_applications/tensorflow)
 ## [VASP](https://eth-cscs.github.io/scientific_computing/supported_applications/vasp)
 ## [Visit](https://eth-cscs.github.io/scientific_computing/supported_applications/visit)
 ## [VMD](https://eth-cscs.github.io/scientific_computing/supported_applications/vmd)
