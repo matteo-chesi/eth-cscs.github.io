@@ -1,11 +1,39 @@
 # Latest News
 
-## Course “Introduction to Programming Pascal (P100) with CUDA 8” at CSCS
+## System configuration changes
 
-The Swiss National Supercomputing Centre (CSCS) is pleased to announce its 3-day workshop “Introduction to Programming Pascal (P100) with CUDA 8” to be held from Monday, February 27 to Wednesday, March 1, 2017 at CSCS in Lugano, Switzerland.
+22.02.2017 [Piz Daint] Cray Programming environment 17.02 is installed as non-default. In order to use it, you need to `module load cdt/17.02`
 
-Please visit [the course webpage](http://www.cscs.ch/events/event_detail/index.html?tx_seminars_pi1%5BshowUid%5D=155) for further information.
+## New supported applications
+
+We are happy to announce that we are now able to support two new scientific applications in our software stack.
+
+* [Theano](http://eth-cscs.github.io/scientific_computing/supported_applications/theano)
+* [TensorFlow](http://eth-cscs.github.io/scientific_computing/supported_applications/tensorflow)
+
+## New System Grand Tavé
+
+We are happy to announce a new computing system at CSCS.
+
+The system is a Cray XC40 Iron Compute. The Intel Kights Landing (KNL) nodes on the system can be allocated within the SLURM batch queuing system.
+
+Additional information is available on the [system webpage](http://www.cscs.ch/computers/grand_tave/index.html).
 
 ---
 
-# List of Installed EasyBuild packages
+# Events
+
+Information about incoming events is available on the [events webpage](http://www.cscs.ch/events).
+
+---
+
+# Planned Outages
+
+- 31.05.2017 [Site wide] Maintenance
+- 27.09.2017 [Site wide] Maintenance
+
+# Past Outages
+
+- 10.02.2017 11:15 – 13:40 - [Piz Daint] Reboot due to system failure
+
+---
