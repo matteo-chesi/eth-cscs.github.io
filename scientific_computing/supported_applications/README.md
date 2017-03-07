@@ -15,5 +15,3 @@ CSCS provides a wide range of scientific applications: please follow the links o
 * [VASP](vasp)
 * [VisIt](visit)
 * [VMD](vmd)
-
-Users can contact us by sending an email to [help(at)cscs.ch](mailto:help@cscs.ch).
