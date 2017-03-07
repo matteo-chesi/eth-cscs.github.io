@@ -4,7 +4,6 @@ Scientific Computing
 
 <!-- use only links inside h1, h2, h3 and h4 -->
 
-
 # [Supported Applications](https://eth-cscs.github.io/scientific_computing/supported_applications)
 ## [Amber](https://eth-cscs.github.io/scientific_computing/supported_applications/amber)
 ## [CP2K](https://eth-cscs.github.io/scientific_computing/supported_applications/cp2k)
@@ -20,7 +19,6 @@ Scientific Computing
 ## [VASP](https://eth-cscs.github.io/scientific_computing/supported_applications/vasp)
 ## [Visit](https://eth-cscs.github.io/scientific_computing/supported_applications/visit)
 ## [VMD](https://eth-cscs.github.io/scientific_computing/supported_applications/vmd)
-
 # [Compiling your code](https://eth-cscs.github.io/scientific_computing/compiling_your_code)
 # [Debugging tools](https://eth-cscs.github.io/scientific_computing/debugging_tools)
 # [EasyBuild framework](https://eth-cscs.github.io/scientific_computing/easybuild_framework)
