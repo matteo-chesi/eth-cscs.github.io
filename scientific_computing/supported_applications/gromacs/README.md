@@ -6,7 +6,7 @@ It is primarily designed for biochemical molecules like proteins, lipids and nuc
 
 # Licensing Terms and Conditions
 
-Gromacs is a joint effort, with contributions from developers around the world: users agree to acknowledge use of GROMACS in any reports or publications of results obtained with the Software (see GROMACS Homepage for details).
+Gromacs is a joint effort, with contributions from developers around the world: users agree to acknowledge use of GROMACS in any reports or publications of results obtained with the Software (see [GROMACS Homepage](http://www.gromacs.org/) for details).
 
 # Setup
 

@@ -23,6 +23,10 @@ body > .container {
   margin: 20px 0;
 }
 
+#cscs-markdown-content {
+  text-align: justify;
+}
+
 pre code {
   white-space: pre;
   word-wrap: normal;
