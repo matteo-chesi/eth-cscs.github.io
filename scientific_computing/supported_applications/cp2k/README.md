@@ -5,10 +5,9 @@ CP2K is a program to perform atomistic and molecular simulations of solid state,
 CP2K is freely available under the [GPL license](http://www.gnu.org/licenses/gpl.html#TOC1). It is written in Fortran 95 and can be run efficiently in parallel.
 
 Key characteristics of CP2K:
-
-    Fist: classical molecular dynamics
-    Kim-Gordon Models
-    Quickstep: Density functional calculations
+ * Fist: classical molecular dynamics
+ * Kim-Gordon Models
+ * Quickstep: Density functional calculations
 
 # Licensing Terms and Conditions
 
