@@ -1,6 +1,6 @@
 # Piz Daint
 
-Piz Daint uses SLURM for the submission, monitoring and control of parallel jobs. Parallel programs compiled with Cray-MPICH (the MPI library available on this system) must be run using the srun command. SLURM batch scripts need to be submitted with the sbatch command from the $SCRATCH folder, since users are NOT supposed to run jobs from different filesystems because of the low performance. A simple SLURM job submission script would look like the following:
+Piz Daint uses SLURM for the submission, monitoring and control of parallel jobs. Parallel programs compiled with Cray-MPICH (the MPI library available on this system) must be run using the __srun__ command. SLURM batch scripts need to be submitted with the __sbatch__ command from the `$SCRATCH` folder, since users are NOT supposed to run jobs from different filesystems because of the low performance. A simple SLURM job submission script would look like the following:
 ```
 #!/bin/bash -l
 #SBATCH --nodes=2
@@ -40,7 +40,7 @@ prepost | 30min | 1 | High priority pre/post processing
 xfer | 24h | 1 | Data transfer queue
 total | 2 h | | CSCS maintenance queue (restricted use)
 
-The list of queues and partitions is available typing __sinfo__ or __scontrol show partition__. Note that not all groups are enabled on every partition, please check the `AllowGroups` entry of the command __scontrol show partition__.
+The list of queues and partitions is available typing __sinfo__ or __scontrol show partition__. Note that not all groups are enabled on every partition, please check the `AllowGroups` entry of the command `scontrol show partition`.
 
 You can choose the queue where to run your job by issuing the `--partition` directive in your batch script: `#SBATCH --partition=<partition_name>`
 
