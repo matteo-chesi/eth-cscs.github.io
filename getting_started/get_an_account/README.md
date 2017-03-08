@@ -7,4 +7,4 @@ Please fill in the following web form if you are:
 
 Please note that if you already have a valid username at CSCS, then you should not fill in any form again. 
 
-In this case, kindly send instead your request to add your username to an existing project to [help(at)cscs.ch](mailto:help@cscs.ch): please send the request in copy to the Principal Investigator, who should explictly confirm the approval of your request before CSCS staff can proceed.
+In this case, kindly send instead your request to add your username to an existing project to [help(at)cscs.ch](mailto:help@cscs.ch): please send the request in copy to the Principal Investigator, who should explictly reply approving your request before CSCS staff can proceed further.
