@@ -8,18 +8,18 @@ All CSCS systems use the SLURM batch system for the submission, control and mana
 * __squeue__ - check the status of jobs on the system
 * __scancel__ - delete one of your jobs from the queue
 
-An appropriate SLURM job submission file for your parallel job is a shell script with a set of directives at the beginning. These directives are issued by starting a line with the string "#SBATCH" (as a note for former PBS batch system users, this is the SLURM equivalent of "#PBS"). A suitable batch script is then submitted to the batch system using the 'sbatch' command.
-Let us remind you that your account will be charged per node usage on most systems, whether you submit batch jobs with sbatch or you use interactive sessions with salloc (please have a look at the corresponding man pages for more details). Interactive allocations (salloc sessions) are for debugging only, and have a maximum wall time of one hour.
+An appropriate SLURM job submission file for your parallel job is a shell script with a set of directives at the beginning. These directives are issued by starting a line with the string `#SBATCH` (as a note for PBS batch system users, this is the SLURM equivalent of `#PBS`). A suitable batch script is then submitted to the batch system using the __sbatch__ command.
+Let us remind you that your account will be charged per node usage on most systems, whether you submit batch jobs with sbatch or you use interactive sessions with __salloc__ (please have a look at the corresponding man pages for more details). Interactive allocations (salloc sessions) are meant for debugging purposes only and have a limited wall time duration.
 
-A basic batch script can be written just using the '--ntasks' and '--time' directives, but extra directives will give you more control on how your job is run.
+A basic batch script can be written just using the `--ntasks` and `--time` directives, but extra directives will give you more control on how your job is run.
 
 # Output and Error
 
 By default the output of your script will be put into a file of the form `slurm-<SLURM_JOB_ID>.out` where `<SLURM_JOB_ID>` is the SLURM batch job number of your job, and the error will be put into a file called `slurm-<SLURM_JOB_ID>.err`, both of these placed in the directory from which you launched the job.
 
-Note that with SLURM the output file is created as soon as your job starts running, and the output from your job is placed in this file as the job progresses so that you can monitor your job's progress. Therefore do not delete this file while your job is running or else you will lose your output. You should also keep in mind that SLURM performs file buffering by default when writing on the output files. In practice, this means that the output of your job will not appear in the output files immediately. If you want to override this behaviour, you should pass the '-u' or '--unbuffered' to the srun command; the output then will appear in the file as soon as it is produced.
+Note that with SLURM the output file is created as soon as your job starts running, and the output from your job is placed in this file as the job progresses, so that you can monitor your job's progress. Therefore do not delete this file while your job is running or else you will lose your output. You should also keep in mind that SLURM performs file buffering by default when writing on the output files: in practice, this means that the output of your job will not appear in the output files immediately. If you want to override this behaviour, you should pass the option `-u` or `--unbuffered` to the srun command; the output will then will appear in the file as soon as it is produced.
 
-As the default names for the output and error files are not very meaningful, you might wish to change them, and in this case you can use the "--output" and "--error" directives in your batch script that you can run with sbatch.
+If you wish to change the default names of the output and error files, you can use the `--output` and `--error` directives in the batch script that you submit using the __sbatch__ command. See the example below:
 
 ```
 #!/bin/bash -l
@@ -27,17 +27,16 @@ As the default names for the output and error files are not very meaningful, you
 #SBATCH --job-name="hello_world_mpi"
 #SBATCH --time=00:05:00
 #SBATCH --nodes=2
-#SBATCH --ntasks-per-node=32
+#SBATCH --ntasks-per-node=18
 #SBATCH --output=hello_world_mpi.%j.o
 #SBATCH --error=hello_world_mpi.%j.e
 
-module load slurm
 srun ./hello_world_mpi.x
 ```
 
-# Migration from Cray ALPS to native SLURM
+# Native SLURM on Cray systems
 
-Cray systems are equipped with native SLURM: the main difference is the absence of aprun, which was replaced by the SLURM command srun. The migration from Cray ALPS (Application Level Placement Scheduler) to native SLURM is supported by the simple examples available below for the most common usage with MPI and hybrid MPI/OpenMP jobs.
+Cray systems at CSCS are equipped with native SLURM, therefore without the Cray command aprun, which has been replaced replaced by the SLURM command __srun__. The migration from Cray ALPS (Application Level Placement Scheduler) to native SLURM is supported by the simple examples available below for the most common usage with MPI and hybrid MPI/OpenMP jobs.
 SLURM man pages (e.g man sbatch) will give useful information and more details on specific options, along with the documentation available on line at: http://slurm.schedmd.com/documentation.html.
 
 Advanced users might also be interested in consulting the presentations available on line from the Slurm User Group meeting, which cover the new features of the latest SLURM release: http://slurm.schedmd.com/publications.html.
