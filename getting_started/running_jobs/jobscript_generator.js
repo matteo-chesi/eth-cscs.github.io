@@ -43,15 +43,29 @@ var _cscs_compose_time = function (hours, minutes) {
 };
 
 var _cscs_pad_interger = function (number) {
-    if (number < 10 && number != "00" 
-        && number != "00" && number != "01" 
-        && number != "02" && number != "03" 
+    if (Number(number) < 10 && number != "00"
+        && number != "00" && number != "01"
+        && number != "02" && number != "03"
         && number != "04" && number != "05"
-        && number != "06" && number != "07" 
-        && number != "08" && number != "09")
+        && number != "06" && number != "07"
+        && number != "08" && number != "09") {
         return "0" + number;
+    }
     return number;
 }
+
+var _cscs_unpad_interger = function (number) {
+    if (Number(number) < 10 && (number == "00"
+        || number == "00" || number == "01"
+        || number == "02" || number == "03"
+        || number == "04" || number == "05"
+        || number == "06" || number == "07"
+        || number == "08" || number == "09")) {
+        return number[1];
+    }
+    return number;
+}
+
 var _cscs_convert_time_string = function (timeString) {
     var time = _cscs_split_time(timeString);
 
@@ -88,6 +102,8 @@ var Partition = function() {
     this.WallTimeDirective         = "--time=";
 
     this.allow_node_sharing = {};
+
+    this.allow_hyperthreading = {};
 
     this.pre_commands = {};
     this.default_executable = {};
@@ -126,10 +142,51 @@ Partition.prototype.getValue = function(propertyName) {
         return null;
     }
     return value;
-}
+};
+
+Partition.prototype.hasHyperThreading = function() {
+    var has_hyperthreading = this.getValue(this.max_num_tasks_per_core);
+    if(has_hyperthreading != null && Number(has_hyperthreading) > Number(1)) {
+        if($('#hyperThreading').prop('checked') == true) {
+            has_hyperthreading = true;
+        } else {
+            has_hyperthreading = false;
+        }
+    } else {
+        has_hyperthreading = false;
+    }
+    return has_hyperthreading;
+};
+
+Partition.prototype.getMaxNumberOfThreads = function() {
+    var has_hyperthreading = this.hasHyperThreading();
+
+    var max_threads = this.getValue(this.max_num_tasks_per_node);
+    var max_tasks_per_core = this.getValue(this.max_num_tasks_per_core);
+    if(max_threads == null) {
+        max_threads = 1;
+    }
+    if(max_tasks_per_core == null) {
+        max_threads = 1;
+    }
+    if(has_hyperthreading == true) {
+        max_threads *= max_tasks_per_core;
+    }
+    return max_threads;
+};
+
+Partition.prototype.updateNodesInformation = function () {
+    var value = this.getValue(this.max_num_tasks_per_node);
+    if (value != null) {
+        if (this.hasHyperThreading()) {
+
+            $('#numberOfTasksPerNode').val(Number(value);
+        }
+
+    }
+};
 
 Partition.prototype.updateTimeGUI = function () {
-
     var target_time = this.getValue(this.max_wall_time);
     if (target_time == null) {
         $('#hours').val("0");
@@ -137,8 +194,8 @@ Partition.prototype.updateTimeGUI = function () {
         // $('#seconds').val("0");
     } else {
         var time = _cscs_split_time(target_time);
-        $('#hours').val(time.hours);
-        $('#minutes').val(time.minutes);
+        $('#hours').val(_cscs_unpad_interger(time.hours));
+        $('#minutes').val(_cscs_unpad_interger(time.minutes));
         // $('#seconds').val(time.seconds);
     }
 };
@@ -178,6 +235,14 @@ Partition.prototype.updatePartitionsFields = function() {
     } else {
         $('#executableGroup').hide();
         $('#executable').val("");
+    }
+
+    value = this.getValue(this.max_num_tasks_per_core);
+    if (value == null) {
+        $('#hyperThreadingGroup').hide();
+        $('#hyperThreading').val(1);
+    } else if (Number(value) > Number(1)) {
+        $('#hyperThreadingGroup').show();
     }
 };
 
@@ -245,7 +310,7 @@ Partition.prototype.getNumTasksPerNodes = function() {
     } else if(max == null) {
         return "";
     }
-    return this.directive + this.NumTasksPerNodesDirective + value + "\n";    
+    return this.directive + this.NumTasksPerNodesDirective + value + "\n";
 };
 
 Partition.prototype.getNumCpusPerTask = function() {
@@ -256,7 +321,7 @@ Partition.prototype.getNumCpusPerTask = function() {
     } else if(max == null) {
         return "";
     }
-    return this.directive + this.NumCpusPerTaskDirective + value + "\n";    
+    return this.directive + this.NumCpusPerTaskDirective + value + "\n";
 };
 
 Partition.prototype.getNumTasksPerCore = function() {
@@ -267,7 +332,7 @@ Partition.prototype.getNumTasksPerCore = function() {
     } else if(max == null) {
         return "";
     }
-    return this.directive + this.NumTasksPerCoreDirective + value + "\n";    
+    return this.directive + this.NumTasksPerCoreDirective + value + "\n";
 };
 
 Partition.prototype.getWallTime = function() {
@@ -288,7 +353,7 @@ Partition.prototype.getWallTime = function() {
     } else if(max_time == null) {
         return "";
     }
-    return this.directive + this.WallTimeDirective + time_string + "\n";    
+    return this.directive + this.WallTimeDirective + time_string + "\n";
 };
 
 Partition.prototype.getMemPerNode = function() {
@@ -299,7 +364,7 @@ Partition.prototype.getMemPerNode = function() {
     } else if(max == null || value == false) {
         return "";
     }
-    return this.directive + this.MemoryDirective + value + "GB\n";    
+    return this.directive + this.MemoryDirective + value + "GB\n";
 };
 
 Partition.prototype.getExecutable = function() {
@@ -338,7 +403,7 @@ Partition.prototype.print = function(element) {
     }
 
     element.innerHTML += this.getWallTime();
-    
+
     element.innerHTML += this.getNumNodes();
     element.innerHTML += this.getNumTasksPerNodes();
     element.innerHTML += this.getNumCpusPerTask();
@@ -346,12 +411,13 @@ Partition.prototype.print = function(element) {
     element.innerHTML += this.getMemPerNode();
     element.innerHTML += this.getPartition();
     element.innerHTML += this.getConstraints();
-    element.innerHTML += this.getExclusive();    
+    element.innerHTML += this.getExclusive();
+    element.innerHTML += this.getMaxNumberOfThreads();
 
 
     element.innerHTML += "\n";
     element.innerHTML += this.getPreCommand();
-    element.innerHTML += this.getExecutable();  
+    element.innerHTML += this.getExecutable();
 };
 
 var DaintGPUPartition = function(name) {
@@ -384,12 +450,12 @@ var DaintGPUPartition = function(name) {
 
     this.pre_commands = {
         xfer : "module unload xalt",
-    };    
+    };
 
     this.default_executable = {
         xfer    : "rsync -av $1 $2\nif [ -n '$3' ]; then\n    sbatch --dependency=afterok:$SLURM_JOB_ID $3\nfi\n",
-    };    
-    
+    };
+
     this.has_constraints = {
         "normal" : '--constraint=gpu',
         "low"    : '--constraint=gpu',
@@ -403,7 +469,7 @@ var DaintGPUPartition = function(name) {
         "high"   : 2400,
         "debug"  : 4
     };
-    
+
     this.max_num_gpus = {
         "normal" : 1,
         "low"    : 1,
@@ -412,17 +478,17 @@ var DaintGPUPartition = function(name) {
     };
 
     this.max_num_tasks_per_node = {
-        "normal" : 24,
-        "low"    : 24,
-        "high"   : 24,
-        "debug"  : 24
+        "normal" : 12,
+        "low"    : 12,
+        "high"   : 12,
+        "debug"  : 12
     };
 
     this.max_num_cpus_per_tasks = {
-        "normal" : 24,
-        "low"    : 24,
-        "high"   : 24,
-        "debug"  : 24
+        "normal" : 12,
+        "low"    : 12,
+        "high"   : 12,
+        "debug"  : 12
     };
 
     this.max_num_tasks_per_core = {
@@ -475,7 +541,7 @@ var MonchPartition = function(name) {
         "low"    : 72,
         "high"   : 72,
         "debug"  : 72
-    };    
+    };
 };
 _bindPrototypeMethods(MonchPartition, Partition);
 //     $('#selectPartition').append('<option>compute</option>');
@@ -588,14 +654,12 @@ function cscs_validate_hour() {
 
         time = _cscs_compute_time(h.hours, minutes);
         if(Number(time) > Number(max_time_value)) {
-            $('#hours').val("max", h.hours);
-            $('#hours').val(h.hours - 1);
+            $('#hours').val("max", _cscs_unpad_interger(h.hours));
+            $('#hours').val(_cscs_unpad_interger(h.hours - 1));
         } else {
-            $('#hours').val("max", h.hours);
-            $('#hours').val(h.hours);
+            $('#hours').val("max", _cscs_unpad_interger(h.hours));
+            $('#hours').val(_cscs_unpad_interger(h.hours));
         }
-
-        return true;
     }
     return true;
 }
@@ -611,13 +675,29 @@ function cscs_validate_minutes() {
 
     if (max_time != null && Number(time) > Number(max_time_value)) {
         var h = _cscs_split_time(max_time);
-        $('#minutes').val("max", h.minutes);
-        $('#minutes').val(h.minutes);
-        return true;
+        $('#minutes').val("max", _cscs_unpad_interger(h.minutes));
+        $('#minutes').val(_cscs_unpad_interger(h.minutes));
     }
     return true;
 }
 
+function cscs_validate_num_tasks_per_core() {
+    var num_tasks_per_core = $('#numberTasksPerCore').val();
+
+    var has_hyperthreading = __cscs_partition.hasHyperThreading();
+
+    if (has_hyperthreading == false) {
+        $('#numberTasksPerCore').val("max", 1);
+        $('#numberTasksPerCore').val(1);
+    } else {
+        var value = __cscs_partition.getValue(__cscs_partition.max_num_tasks_per_core);
+        if (Number(value) > num_tasks_per_core) {
+            $('#numberTasksPerCore').val("max", value);
+            $('#numberTasksPerCore').val(value);
+        }
+    }
+    return true;
+}
 
 
 
@@ -634,11 +714,11 @@ function cscs_validate_minutes() {
 //          _cscs_display_monch_partitions();
 //      } else if ($(this).val() == 'Tave') {
 //          _cscs_display_tave_partitions();
-//      } 
+//      }
 //  });
 //  $("#submit_button").click(function() {
 //    _cscs_print_job_script();
-//  }); 
+//  });
 // }
 
 // function _cscs_clean_partitions() {
@@ -688,7 +768,7 @@ function cscs_validate_minutes() {
 //         'normal'  : 2,
 //         'debug'   : 2,
 //         'longrun' : 1,
-//     }   
+//     }
 // }
 
 // function _cscs_display_monch_partitions() {
@@ -765,19 +845,19 @@ function cscs_validate_minutes() {
 //         // self.num_cpus_per_task = None
 //         // self.num_tasks_per_core = None
 //         // self.num_tasks_per_socket = None
-//         // self.use_multithreading = False  
+//         // self.use_multithreading = False
 
-//  //  1 #!/bin/bash -l                                                                  
-//  //  2 #SBATCH --job-name="score_p_C_daint_gpu_PrgEnv-cray"                            
-//  //  3 #SBATCH --time=0:10:0                                                           
-//  //  4 #SBATCH --ntasks=3                                                              
-//  //  5 #SBATCH --ntasks-per-node=3                                                     
-//  //  6 #SBATCH --cpus-per-task=4                                                       
-//  //  7 #SBATCH --exclusive                                                             
-//  //  8 #SBATCH --hint=nomultithread                                                    
+//  //  1 #!/bin/bash -l
+//  //  2 #SBATCH --job-name="score_p_C_daint_gpu_PrgEnv-cray"
+//  //  3 #SBATCH --time=0:10:0
+//  //  4 #SBATCH --ntasks=3
+//  //  5 #SBATCH --ntasks-per-node=3
+//  //  6 #SBATCH --cpus-per-task=4
+//  //  7 #SBATCH --exclusive
+//  //  8 #SBATCH --hint=nomultithread
 //  //  9 #SBATCH --output="/users/hvictor/Work/score-p/PyRegression/regstage/gpu/score_p_C/PrgEnv-cray/score_p_C.out"
 //  // 10 #SBATCH --error="/users/hvictor/Work/score-p/PyRegression/regstage/gpu/score_p_C/PrgEnv-cray/score_p_C.err"
-//  // 11 #SBATCH --constraint=gpu     
+//  // 11 #SBATCH --constraint=gpu
 
 
 // }

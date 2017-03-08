@@ -22,17 +22,17 @@
     <label for="executable">Executable</label>
     <p class="help-block">Specify the executable of your application.</p>
     <input type="input" class="form-control" id="executable" placeholder="./executable.x" onkeyup="return cscs_print_jobscript()">
-  </div>  
+  </div>
  <div class="form-group">
     <label for="jobName">Job Name</label>
     <p class="help-block">Specify a name for your job.</p>
     <input type="input" class="form-control" id="jobName" placeholder="job_name" onkeyup="return cscs_print_jobscript()">
-  </div>  
+  </div>
  <div class="form-group">
     <label for="emailAddress">Email address</label>
     <p class="help-block">Specify your email address to get notified when the job changes state.</p>
     <input type="email" class="form-control" id="emailAddress" placeholder="Email" onkeyup="return cscs_print_jobscript()">
-  </div>  
+  </div>
   <div class="row form-group">
     <div class="col-md-12">
     <label for="wallclock">Wall time</label>
@@ -46,12 +46,13 @@
       <p class="help-block">minutes</p>
       <input type="number" class="form-control" id="minutes" min="0" max="59" placeholder="0" onchange="return cscs_validate_minutes() && cscs_print_jobscript()" onkeyup="return cscs_validate_minutes() && cscs_print_jobscript()" onkeydown="return cscs_validate_minutes() && cscs_print_jobscript()">
     </div>
-<!--     <div class="col-md-4">
+<!--
+    <div class="col-md-4">
       <p class="help-block">seconds</p>
       <input type="number" class="form-control" id="seconds" min="0" max="59" placeholder="0" onchange="return cscs_validate_hour() && cscs_print_jobscript()" onkeyup="return cscs_validate_hour() && cscs_print_jobscript()">
     </div>
- -->  </div>
- 
+ -->
+  </div>
   <div class="form-group" id="ExclusiveNodeGroup">
     <label for="ExclusiveNode">Exclusive</label>
     <p class="help-block">Specify if you want to share your node.</p>
@@ -61,25 +62,34 @@
       </label>
     </div>
   </div>
+  <div class="form-group" id="hyperThreadingGroup">
+    <label for="hyperThreading">Hyperthreading</label>
+    <p class="help-block">Specify if you want to enable HyperThreading.</p>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" id="hyperThreading" onchange="cscs_print_jobscript()">Enable hyperthreading
+      </label>
+    </div>
+  </div>
   <div class="form-group" id="numberOfNodesGroup">
     <label for="numberOfNodes">Number of nodes</label>
     <p class="help-block">Specify the number of nodes.</p>
     <input type="number" class="form-control" id="numberOfNodes" min="1" value="1" onchange="return cscs_print_jobscript()">
-  </div>  
+  </div>
   <div class="form-group" id="numberOfTasksPerNodeGroup">
     <label for="numberOfTasksPerNode">Number of tasks per node</label>
     <p class="help-block">Specify the number of tasks per node, e.g. number of MPI ranks per node.</p>
-    <input type="number" class="form-control" id="numberOfTasksPerNode" min="1" value="1" onchange="return cscs_print_jobscript()">
-  </div>  
+    <input type="number" class="form-control" id="numberOfTasksPerNode" min="1" onchange="return cscs_print_jobscript()">
+  </div>
   <div class="form-group" id="numberOfCpusPerTasksGroup">
     <label for="numberOfCpusPerTasks">Number of cpus per task</label>
     <p class="help-block">Specify the number of cups per task, e.g. number of OpenMP threads per MPI rank.</p>
-    <input type="number" class="form-control" id="numberOfCpusPerTasks" min="1" value="1" onchange="return cscs_print_jobscript()">
+    <input type="number" class="form-control" id="numberOfCpusPerTasks" min="1" onchange="return cscs_print_jobscript()">
   </div>
   <div class="form-group" id="numberTasksPerCoreGroup">
     <label for="numberTasksPerCore">Number of tasks per core</label>
     <p class="help-block">Specify the number of tasks per core.</p>
-    <input type="number" class="form-control" id="numberTasksPerCore" min="1" value="1" onchange="return cscs_print_jobscript()">
+    <input type="number" class="form-control" id="numberTasksPerCore" min="1" onchange="return cscs_print_jobscript()">
   </div>
   <div class="form-group" id="bigMemoryGroup">
     <label for="bigMemory">Large memory nodes</label>
@@ -89,7 +99,7 @@
         <input type="checkbox" id="bigMemory" onchange="return cscs_print_jobscript()">Large memory nodes
       </label>
     </div>
-  </div>  
+  </div>
   <!-- <a class="btn btn-primary" type="submit" id="submit_button" class="btn btn-default" href="#generated-script">Generate</a> -->
 </form>
 
