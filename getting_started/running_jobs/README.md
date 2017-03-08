@@ -15,7 +15,7 @@ A basic batch script can be written just using the '--ntasks' and '--time' direc
 
 # Output and Error
 
-By default the output of your script will be put into a file of the form slurm-<XXXX>.out where <XXXX> is the SLURM batch job number of your job, and the error will be put into a file called slurm-<XXXX>.err with both of these being placed in the directory from which you launched the job.
+By default the output of your script will be put into a file of the form `slurm-<SLURM_JOB_ID>.out` where `<SLURM_JOB_ID>` is the SLURM batch job number of your job, and the error will be put into a file called `slurm-<SLURM_JOB_ID>.err`, both of these placed in the directory from which you launched the job.
 
 Note that with SLURM the output file is created as soon as your job starts running, and the output from your job is placed in this file as the job progresses so that you can monitor your job's progress. Therefore do not delete this file while your job is running or else you will lose your output. You should also keep in mind that SLURM performs file buffering by default when writing on the output files. In practice, this means that the output of your job will not appear in the output files immediately. If you want to override this behaviour, you should pass the '-u' or '--unbuffered' to the srun command; the output then will appear in the file as soon as it is produced.
 
