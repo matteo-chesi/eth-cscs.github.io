@@ -46,4 +46,3 @@ You can choose the queue where to run your job by issuing the `--partition` dire
 
 Please check the man pages and the official documentation for further details on SLURM directives.
 For a list of the most useful SLURM commands, have a look at the corresponding entry in the FAQ list.
-If you have any questions, don't hesitate to contact us.
