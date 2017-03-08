@@ -11,7 +11,6 @@ To use Theano on Piz Daint you have to load the corresponding module:
 
 ```
 module load daint-gpu
-module use /apps/daint/UES/6.0.UP02/sandbox-ds/easybuild/haswell/modules/all/
 module load Theano/0.8.2-CrayGNU-2016.11-Python-3.5.2
 ```
 
@@ -115,16 +114,6 @@ Say, this sbatch file is named `test-th.sbatch`, then it is submitted to Slurm b
 
 ```
 sbatch test-th.sbatch
-```
-
-The status of Slurm's queue can be viewed with
-```
-squeue -u $USER
-```
-
-and a job can be cancelled running
-```
-scancel <JOBID>
 ```
 
 A more detailed documentation on how to submit a job can be found
