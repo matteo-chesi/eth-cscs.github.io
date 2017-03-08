@@ -38,7 +38,7 @@ high | 24 h | 2400 | High priority queue, time is charged double
 large | 12 h | 4400 | Large scale work, by arrangement only
 prepost | 30min | 1 | High priority pre/post processing
 xfer | 24h | 1 | Data transfer queue
-total | 2 h | CSCS maintenance queue (restricted use)
+total | 2 h | | CSCS maintenance queue (restricted use)
 
 The list of queues and partitions is available typing __sinfo__ or __scontrol show partition__. Note that not all groups are enabled on every partition, please check the `AllowGroups` entry of the command __scontrol show partition__.
 
