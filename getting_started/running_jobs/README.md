@@ -50,14 +50,13 @@ Advanced users might also be interested in consulting the presentations availabl
 #SBATCH --ntasks-per-node=8
 #SBATCH --ntasks-per-core=2
 #SBATCH --cpus-per-task=2
-#SBATCH --gres=gpu:1
+#SBATCH --constraint=gpu
 #SBATCH --time=00:30:00
 
 srun -n $SLURM_NTASKS --ntasks-per-node=$SLURM_NTASKS_PER_NODE -c $SLURM_CPUS_PER_TASK --cpu_bind=rank ./myprogram.exe 
 ```
 
-The example above shows an MPI job allocated on two nodes using hyperthreading on Piz Daint.
-You might need to use the SLURM option --constraint=gpu to run on the XC50 using the GPU accelerator on each node. With the exception of the gpu flag, the same srun options apply on XC40, where you need to adjust the number of cores of the Broadwell compute node, featuring two sockets with eighteen cores each. The flag -l at the beginning allows you to call the module command within the script, in case you need it.
+The example above shows an MPI job allocated on two nodes using hyperthreading on Piz Daint. You need to use the SLURM option --constraint=gpu to run on the XC50 using the GPU accelerator on each node. With the exception of this flag, the same srun options apply on the XC40, where you need to adjust the number of cores of the Broadwell compute node, featuring two sockets with eighteen cores each. The flag -l at the beginning allows you to call the module command within the script, in case you need it.
 
 ```
 #!/bin/bash -l
@@ -73,16 +72,16 @@ srun -n $SLURM_NTASKS --ntasks-per-node=$SLURM_NTASKS_PER_NODE -c $SLURM_CPUS_PE
 ```
 
 The SLURM script above shows how to run a hybrid job with two MPI tasks per node, spawning eighteen threads per socket on a two-sockets Broadwell compute node.
-The srun option --hint=nomultithread will avoid using extra threads with in-core multi-threading, a configuration that can benefit communication intensive applications (see man srun for further details).
+The srun option --hint=nomultithread would avoid using extra threads with in-core multi-threading, a configuration that can benefit communication intensive applications (see __man srun__ for further details).
+
+The example below shows the commands required to run large MPI jobs:
+ - PMI_MMAP_SYNC_WAIT_TIME and srun option --wait prevent Slurm from killing tasks that take long time to run
+ - srun's option --bcast copies the binary to /tmp on all nodes before launching them. This helps task startup time.
 
 ```
 export PMI_MMAP_SYNC_WAIT_TIME=300
 srun --wait 200 --bcast=/tmp/hello-world.${ARCH} $HOME/jobs/bin/daint/hello-world.${ARCH}
 ```
-
-The example above shows what needs to be done to run large MPI jobs:
-- PMI_MMAP_SYNC_WAIT_TIME and srun option --wait prevent Slurm from killing tasks that take long time to run
-- srun's option --bcast copies the binary to /tmp on all nodes before launching them. This helps task startup time.
 
 # Synoptic table
 
@@ -95,4 +94,4 @@ Thread/task affinity | -cc cpu |--cpu_bind=rank
 Large memory nodes | -q bigmem |--mem=120GB
 
 
-The other SLURM commands will always be the same: the list of queues and partitions is available typing sinfo or scontrol show partition, the SLURM queue can be monitored with the squeue command and the jobs saved in the SLURM database can be inspected with the sacct command.
+The list of queues and partitions is available typing __sinfo__ or __scontrol show partition__, the SLURM queue can be monitored with the __squeue__ command and the jobs saved in the SLURM database can be inspected with the __sacct__ command.
