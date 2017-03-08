@@ -37,10 +37,9 @@ srun ./hello_world_mpi.x
 # Native SLURM on Cray systems
 
 Cray systems at CSCS are equipped with native SLURM, therefore without the Cray command aprun, which has been replaced replaced by the SLURM command __srun__. The migration from Cray ALPS (Application Level Placement Scheduler) to native SLURM is supported by the simple examples available below for the most common usage with MPI and hybrid MPI/OpenMP jobs.
-SLURM man pages (e.g man sbatch) will give useful information and more details on specific options, along with the documentation available on line at: http://slurm.schedmd.com/documentation.html.
+SLURM man pages (e.g man sbatch) will give useful information and more details on specific options, along with the [SLURM documentation](http://slurm.schedmd.com/documentation.html).
 
-Advanced users might also be interested in consulting the presentations available on line from the Slurm User Group meeting, which cover the new features of the latest SLURM release: http://slurm.schedmd.com/publications.html.
-
+Advanced users might also be interested in consulting the presentations available on line from the [Slurm User Group meeting](http://slurm.schedmd.com/publications.html), covering the features of the latest SLURM release.
 ```
 #!/bin/bash -l
 #
@@ -55,8 +54,7 @@ Advanced users might also be interested in consulting the presentations availabl
 srun -n $SLURM_NTASKS --ntasks-per-node=$SLURM_NTASKS_PER_NODE -c $SLURM_CPUS_PER_TASK --cpu_bind=rank ./myprogram.exe 
 ```
 
-The example above shows an MPI job allocated on two nodes using hyperthreading on Piz Daint. You need to use the SLURM option --constraint=gpu to run on the XC50 using the GPU accelerator on each node. With the exception of this flag, the same srun options apply on the XC40, where you need to adjust the number of cores of the Broadwell compute node, featuring two sockets with eighteen cores each. The flag -l at the beginning allows you to call the module command within the script, in case you need it.
-
+The example above shows an MPI job allocated on two nodes using hyperthreading on Piz Daint. You need to use the SLURM option `--constraint=gpu` to run on the XC50 with the GPU accelerator on each node. If you select the XC40 with the alternative option `--constraint=mc`, the same srun options apply, but you will need to adjust the number of cores of the Broadwell compute node, featuring two sockets with eighteen cores each. The flag -l at the beginning allows you to call the module command within the script, in case you need it.
 ```
 #!/bin/bash -l
 #
@@ -71,7 +69,7 @@ srun -n $SLURM_NTASKS --ntasks-per-node=$SLURM_NTASKS_PER_NODE -c $SLURM_CPUS_PE
 ```
 
 The SLURM script above shows how to run a hybrid job with two MPI tasks per node, spawning eighteen threads per socket on a two-sockets Broadwell compute node.
-The srun option --hint=nomultithread would avoid using extra threads with in-core multi-threading, a configuration that can benefit communication intensive applications (see __man srun__ for further details).
+The srun option `--hint=nomultithread` would avoid using extra threads with in-core multi-threading, a configuration that can benefit communication intensive applications (see __man srun__ for further details).
 
 The example below shows the commands required to run large MPI jobs:
  - PMI_MMAP_SYNC_WAIT_TIME and srun option --wait prevent Slurm from killing tasks that take long time to run
