@@ -1,4 +1,4 @@
-# Gran Tavé
+# Grand Tavé
 
 Grand Tavé uses SLURM for the submission, monitoring and control of parallel jobs. 
 Parallel programs must be run using the command __srun__. SLURM batch scripts need to be submitted with the sbatch command 
