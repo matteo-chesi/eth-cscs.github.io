@@ -19,7 +19,7 @@ The flag `-l` at the beginning allows you to call the module command within the 
 
 Name of the queue |	Max time | Max running jobs per user | Max number nodes
 --- | --- | --- | ---
-normal | 5 | hours |	- | 160
+normal | 5 hours |  |	- | 160
 
 The list of queues and partitions is available typing __sinfo__ or __scontrol show partition__. 
 Note that not all groups are enabled on every partition, please check the `AllowGroups` entry of the command
