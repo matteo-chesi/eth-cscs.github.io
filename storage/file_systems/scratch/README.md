@@ -1,4 +1,4 @@
-/scratch
+# /scratch
 
 The `/scratch` file system is designed for performance rather than reliability, as a fast workspace for temporary storage. All CSCS systems provide a scratch personal folder for users that can be accessed through the environment variable `$SCRATCH`.
 

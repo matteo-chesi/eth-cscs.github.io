@@ -2,10 +2,10 @@
 
 CSCS supports different file systems, whose specifications are summarized in the table below:
 	
-/scratch (Piz Daint) | /scratch (Clusters) | /users | /project | /store
- --- | --- | --- | --- | --- 
+ | /scratch (Piz Daint) | /scratch (Clusters) | /users | /project | /store
+ --- | --- | --- | --- | --- | --- 
 Type | Lustre | GPFS | GPFS | GPFS | GPFS
-Quota |	Soft quota 1 M files | None | 10 GB/user | 100 K files | 50 K files/TB | As per contract
+Quota |	Soft quota 1 M files | None | 10 GB/user, 100 K files | 50 K files/TB | As per contract
 Expiration | 30 days | 30 days | None | End of the project | As per contract
 Data Backup | None | None | Active | Active | Active
 Access Speed | Fast | Fast | Slow  | Medium | Slow
