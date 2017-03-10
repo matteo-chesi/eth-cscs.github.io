@@ -13,16 +13,16 @@ Capacity | 6.2 PB | 1.4 PB | 86 TB | 5.7 PB | 4.4 PB
 
 ## /scratch
 
-All users have a personal folder under the [/scratch](https://eth-cscs.github.io/storage/file_systems/scratch) file system.
+All users have a personal folder under the [/scratch](scratch) file system.
 
 ## /users
 
-Each user has a personal home folder under the [/users](https://eth-cscs.github.io/storage/file_systems/users) file system.
+Each user has a personal home folder under the [/users](users) file system.
 
 ## /project
 
-Production projects proposals can ask for group storage under the [/project](https://eth-cscs.github.io/storage/file_systems/project) file system.
+Production projects proposals can ask for group storage under the [/project](project) file system.
 
 ## /store
 
-Contractual partners can buy dedicated storage under the [/store](https://eth-cscs.github.io/storage/file_systems/store) file system.
+Contractual partners can buy dedicated storage under the [/store](store) file system.
