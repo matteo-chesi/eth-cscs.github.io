@@ -2,7 +2,7 @@
 
 All data present in the filesystems `/users`, `/project` and `/store` are under backup. 
 
-## Retention policies for data backup
+Policies for data backup:
 
  * each file in the filesystem has copy in the backup system
  * when a file is modified, the previous version (extra copy) is kept along with the newly modified one (primary copy)
