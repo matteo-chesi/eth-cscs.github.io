@@ -4,8 +4,8 @@
 
 [Piz Daint] We are happy to announce that we are now able to support two new scientific applications in our software stack.
 
-* [TensorFlow](http://eth-cscs.github.io/scientific_computing/supported_applications/tensorflow)
-* [Theano](http://eth-cscs.github.io/scientific_computing/supported_applications/theano)
+* [TensorFlow](scientific_computing/supported_applications/tensorflow)
+* [Theano](scientific_computing/supported_applications/theano)
 
 ##  07.03.2017 - KNL Grand Tavé installed at CSCS
 
@@ -34,3 +34,7 @@ module load cdt/17.02
 # Upcoming Events
 
 The list of upcoming events is available on the [events webpage](http://www.cscs.ch/events).
+
+# Tutorials
+
+CSCS provides on the [Tutorials webpage](http://www.cscs.ch/publications/tutorials/index.html) the material of the courses organized over the past years.
