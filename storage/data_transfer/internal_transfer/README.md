@@ -49,5 +49,5 @@ sbatch --dependency=afterok:${SLURM_JOB_ID} --job-name=stage_out stage.sbatch ${
 Note that due to a mismatch of the SLURM configuration between the data transfer server and Piz Daint you will see a harmless error message in your SLURM error file, which we kindly ask you to ignore:
 ```
 slurmstepd: error: (task_cray.c: 716: _get_numa_nodes) Failed to open file /dev/cpuset/slurm/uid_21827/job_614579/step_batch/cpuset.mems: No such file or directory
- sl`urmstepd: error: (task_cray.c: 507: task_p_post_step) get_numa_nodes failed. Return code: -1
+slurmstepd: error: (task_cray.c: 507: task_p_post_step) get_numa_nodes failed. Return code: -1
 ```
