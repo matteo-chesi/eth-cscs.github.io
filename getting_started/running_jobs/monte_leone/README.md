@@ -9,7 +9,7 @@ A simple SLURM job submission script would look like the following:
 ```
 #!/bin/bash -l
 
-# SBATCH --nodes=2
+#SBATCH --nodes=2
 #SBATCH --ntasks=28
 #SBATCH --time=00:30:00
 
