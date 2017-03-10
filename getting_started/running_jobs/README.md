@@ -1,6 +1,6 @@
 # Running jobs
 
-All CSCS systems use the SLURM batch system for the submission, control and management of user jobs.
+All CSCS systems use the SLURM batch system for the submission, control and management of user jobs: we provide a useful tool to generate SLURM jobscripts for submission on CSCS computing systems [online](https://eth-cscs.github.io/getting_started/running_jobs/jobscript_generator.html).
 
 [SLURM](https://computing.llnl.gov/linux/slurm/) provides a rich set of features for organizing your workload and provides an extensive array of tools for managing your resource usage, however in normal interaction with the batch system you only need to know three basic commands:
 
