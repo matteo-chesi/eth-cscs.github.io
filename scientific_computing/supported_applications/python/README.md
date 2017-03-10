@@ -1,7 +1,6 @@
 # List of supported Python modules 
 
 * Available on all Python installations (module called "Python", with capital P)
-   * the lowercase "python" modules are old versions and are not supported anymore by CSCS
 
 ## Notes on the Python modules built with EasyBuild 
 
@@ -30,12 +29,14 @@
 * Need an extra module load before the 'import'
   * h5py (serial/parallel) 
   * matplotlib 
-  * pyCuda  (Daint only)
+  * pyCuda  (daint-gpu only)
   * netcdf4 
 
 ---
 
 # Python Virtual Environment
+
+If you wish to install your own python modules, we recommend you to use [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) 
 
 Start by loading Python, e.g., with Python 2.7
 
