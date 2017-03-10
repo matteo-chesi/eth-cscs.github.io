@@ -75,6 +75,20 @@ var _cscs_convert_time_string = function (timeString) {
     return null;
 };
 
+var _cscs_is_element_hidden = function (element) {
+    return $(element).is(":visible");
+};
+
+var _cscs_get_GUI_PropertyValue = function(element) {
+    var object = $(element);
+    var value = object.val();
+    var isVisible = _cscs_is_element_hidden(object);
+
+    if(isVisible == false) {
+        return null;
+    } 
+    return value;
+};
 
 var _bindPrototypeMethods = function (child, parent) {
     child.prototype = Object.create(parent.prototype);
@@ -104,6 +118,8 @@ var Partition = function() {
     this.allow_node_sharing = {};
 
     this.allow_hyperthreading = {};
+
+    this.partition_website = {};
 
     this.pre_commands = {};
     this.default_executable = {};
@@ -145,17 +161,18 @@ Partition.prototype.getValue = function(propertyName) {
 };
 
 Partition.prototype.hasHyperThreading = function() {
-    var has_hyperthreading = this.getValue(this.max_num_tasks_per_core);
-    if(has_hyperthreading != null && Number(has_hyperthreading) > Number(1)) {
-        if($('#hyperThreading').prop('checked') == true) {
-            has_hyperthreading = true;
-        } else {
-            has_hyperthreading = false;
-        }
-    } else {
-        has_hyperthreading = false;
+    var allow_hyperthreading = this.getValue(this.max_num_tasks_per_core);
+    var has_hyperthreading = _cscs_get_GUI_PropertyValue('#numberTasksPerCore');
+    if(has_hyperthreading == null) {
+        has_hyperthreading = 1;
     }
-    return has_hyperthreading;
+
+    if(allow_hyperthreading != null && Number(allow_hyperthreading) > Number(1) && Number(has_hyperthreading) > Number(1)) {
+        allow_hyperthreading = true;
+    } else {
+        allow_hyperthreading = false;
+    }
+    return allow_hyperthreading;
 };
 
 Partition.prototype.getMaxNumberOfThreads = function() {
@@ -165,25 +182,51 @@ Partition.prototype.getMaxNumberOfThreads = function() {
     var max_tasks_per_core = this.getValue(this.max_num_tasks_per_core);
     if(max_threads == null) {
         max_threads = 1;
-    }
-    if(max_tasks_per_core == null) {
-        max_threads = 1;
-    }
-    if(has_hyperthreading == true) {
+    } else if(has_hyperthreading == true) {
         max_threads *= max_tasks_per_core;
     }
     return max_threads;
 };
 
-Partition.prototype.updateNodesInformation = function () {
-    var value = this.getValue(this.max_num_tasks_per_node);
-    if (value != null) {
+Partition.prototype.setNumTasksPerNodeAndNumCpusPerNodeValues = function (num_tasks_per_core) {
+    // max tasks per node
+    var tasks_per_node = this.getValue(this.max_num_tasks_per_node);
+    if (tasks_per_node != null) {
         if (this.hasHyperThreading()) {
-
-            $('#numberOfTasksPerNode').val(Number(value);
+            tasks_per_node *= num_tasks_per_core;
         }
-
+    } else {
+        tasks_per_node = 1;
     }
+    $('#numberOfTasksPerNode').val("max", tasks_per_node);
+    $('#numberOfTasksPerNode').val(tasks_per_node);
+
+
+    // max cpus per tasks
+    var cpus_per_task = this.getValue(this.max_num_cpus_per_tasks);
+    if (cpus_per_task != null) {
+        cpus_per_task = Math.floor(this.getMaxNumberOfThreads() / tasks_per_node);
+    } else {
+        cpus_per_task = 1;
+    }
+    $('#numberOfCpusPerTask').val("max", cpus_per_task);
+    $('#numberOfCpusPerTask').val(cpus_per_task);
+}
+
+Partition.prototype.updateNodesInformation = function () {
+    // max tasks per core
+    var tasks_per_core = this.getValue(this.max_num_tasks_per_core);
+    if (tasks_per_core != null) {
+        if (!this.hasHyperThreading()) {
+            tasks_per_core = 1;
+        }
+    } else {
+        tasks_per_core = 1;
+    }
+    $('#numberTasksPerCore').val("max", tasks_per_core);
+    $('#numberTasksPerCore').val(tasks_per_core);
+
+    this.setNumTasksPerNodeAndNumCpusPerNodeValues(tasks_per_core);
 };
 
 Partition.prototype.updateTimeGUI = function () {
@@ -224,9 +267,9 @@ Partition.prototype.updatePartitionsFields = function() {
     this.hideGUIBooleanField('#ExclusiveNodeGroup', this.allow_node_sharing, true);
 
     this.hideGUIDataField('#numberOfNodesGroup', this.max_num_nodes);
-    this.hideGUIDataField('#numberOfTasksPerNodeGroup', this.max_num_tasks_per_node);
-    this.hideGUIDataField('#numberOfCpusPerTasksGroup', this.max_num_cpus_per_tasks);
     this.hideGUIDataField('#numberTasksPerCoreGroup', this.max_num_tasks_per_core);
+    this.hideGUIDataField('#numberOfTasksPerNodeGroup', this.max_num_tasks_per_node);
+    this.hideGUIDataField('#numberOfCpusPerTaskGroup', this.max_num_cpus_per_tasks);
     this.hideGUIDataField('#bigMemoryGroup', this.max_memory_per_node);
 
     var value = this.getValue(this.default_executable);
@@ -235,14 +278,6 @@ Partition.prototype.updatePartitionsFields = function() {
     } else {
         $('#executableGroup').hide();
         $('#executable').val("");
-    }
-
-    value = this.getValue(this.max_num_tasks_per_core);
-    if (value == null) {
-        $('#hyperThreadingGroup').hide();
-        $('#hyperThreading').val(1);
-    } else if (Number(value) > Number(1)) {
-        $('#hyperThreadingGroup').show();
     }
 };
 
@@ -258,15 +293,22 @@ Partition.prototype.updatePartitionsInGUI = function() {
         __cscs_partition = new _self.typeName($(this).val());
         __cscs_partition.updatePartitionsFields();
         __cscs_partition.updateTimeGUI();
-        // document.getElementById("jobscript").innerHTML = null;
+        __cscs_partition.updateNodesInformation();
+        cscs_print_jobscript();
+    });
+
+    $('#numberTasksPerCore').change(function(){
+        // add here the changes when the partition changes
+        __cscs_partition.updateNodesInformation();
         cscs_print_jobscript();
     });
 
     __cscs_partition.updatePartitionsFields();
     __cscs_partition.updateTimeGUI();
+    __cscs_partition.updateNodesInformation();
 };
 
-Partition.prototype.getPartition = function() {
+Partition.prototype.printPartition = function() {
     var value = this.getValue(this.Partition);
     if (value == null) {
         return "";
@@ -274,7 +316,7 @@ Partition.prototype.getPartition = function() {
     return this.directive + value + this.name + "\n";
 };
 
-Partition.prototype.getConstraints = function() {
+Partition.prototype.printConstraints = function() {
     var value = this.getValue(this.has_constraints);
     if (value == null) {
         return "";
@@ -282,7 +324,7 @@ Partition.prototype.getConstraints = function() {
     return this.directive + value + "\n";
 };
 
-Partition.prototype.getExclusive = function() {
+Partition.prototype.printExclusive = function() {
     var value = $('#ExclusiveNode').prop("checked");
     var max = this.getValue(this.allow_node_sharing);
     if (max != null && value == true) {
@@ -291,48 +333,42 @@ Partition.prototype.getExclusive = function() {
     return "";
 };
 
-Partition.prototype.getNumNodes = function() {
-    var value = $('#numberOfNodes').val();
-    var max = this.getValue(this.max_num_nodes);
-    if (max != null && Number(value) > Number(max)) {
-        value = max;
-    } else if(max == null) {
-        return "";
+Partition.prototype.printNumNodes = function() {
+    var value = _cscs_get_GUI_PropertyValue('#numberOfNodes');
+    if(value != null) {
+        return this.directive + this.NumNodesDirective + value + "\n";        
     }
-    return this.directive + this.NumNodesDirective + value + "\n";
+    return "";
 };
 
-Partition.prototype.getNumTasksPerNodes = function() {
-    var value = $('#numberOfTasksPerNode').val();
-    var max = this.getValue(this.max_num_tasks_per_node);
-    if (max != null && Number(value) > Number(max)) {
-        value = max;
-    } else if(max == null) {
-        return "";
+Partition.prototype.printNumTasksPerCore = function() {
+    var value = _cscs_get_GUI_PropertyValue('#numberTasksPerCore');
+    if(value != null) {
+        return this.directive + this.NumTasksPerCoreDirective + value + "\n";        
     }
-    return this.directive + this.NumTasksPerNodesDirective + value + "\n";
+    return "";
 };
 
-Partition.prototype.getNumCpusPerTask = function() {
-    var value = $('#numberOfCpusPerTasks').val();
-    var max = this.getValue(this.max_num_cpus_per_tasks);
-    if (max != null && Number(value) > Number(max)) {
-        value = max;
-    } else if(max == null) {
-        return "";
+Partition.prototype.printNumTasksPerNodes = function() {
+    var value = _cscs_get_GUI_PropertyValue('#numberOfTasksPerNode');
+    if(value != null) {
+        return this.directive + this.NumTasksPerNodesDirective + value + "\n";        
     }
-    return this.directive + this.NumCpusPerTaskDirective + value + "\n";
+    return "";
 };
 
-Partition.prototype.getNumTasksPerCore = function() {
-    var value = $('#numberTasksPerCore').val();
-    var max = this.getValue(this.max_num_tasks_per_core);
-    if (max != null && Number(value) > Number(max)) {
-        value = max;
-    } else if(max == null) {
-        return "";
+Partition.prototype.printNumCpusPerTask = function() {
+    var value = _cscs_get_GUI_PropertyValue('#numberOfCpusPerTask');
+    if(value != null) {
+        return this.directive + this.NumCpusPerTaskDirective + value + "\n";        
     }
-    return this.directive + this.NumTasksPerCoreDirective + value + "\n";
+    return "";
+};
+
+Partition.prototype.printEnvironmentVariables = function() {
+    var toPrint = "";
+    toPrint += "export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK\n";        
+    return toPrint;
 };
 
 Partition.prototype.getWallTime = function() {
@@ -356,7 +392,7 @@ Partition.prototype.getWallTime = function() {
     return this.directive + this.WallTimeDirective + time_string + "\n";
 };
 
-Partition.prototype.getMemPerNode = function() {
+Partition.prototype.printMemPerNode = function() {
     var value = $('#bigMemory').prop("checked");
     var max = this.getValue(this.max_memory_per_node);
     if (max != null && value == true) {
@@ -367,7 +403,7 @@ Partition.prototype.getMemPerNode = function() {
     return this.directive + this.MemoryDirective + value + "GB\n";
 };
 
-Partition.prototype.getExecutable = function() {
+Partition.prototype.printExecutable = function() {
     var value = $('#executable').val();
     var max = this.getValue(this.default_executable);
     if (max != null && (value == "" || value == "undefined" || value == null)) {
@@ -378,7 +414,7 @@ Partition.prototype.getExecutable = function() {
     return "srun " + value;
 };
 
-Partition.prototype.getPreCommand = function() {
+Partition.prototype.printPreCommand = function() {
     var value = this.getValue(this.pre_commands);
     if (value != null && value != "" && value != "undefined") {
         return value + "\n";
@@ -386,7 +422,98 @@ Partition.prototype.getPreCommand = function() {
     return "";
 };
 
-Partition.prototype.print = function(element) {
+Partition.prototype.printPartitionWebSite = function(element) {
+    var website = this.getValue(this.partition_website);
+    if(website != null) {
+        element.innerHTML = "For more information about this queue, please refer to this <a target='_blank' href='" + website + "'>website</a>.";
+    }
+}
+
+
+Partition.prototype.printJobScriptMessage = function(element) {
+    var max_num_threads = this.getMaxNumberOfThreads();
+
+    var current_num_threads = 1;
+    var arrayOfNodeInfo = [];
+
+    var num_tasks_per_core = _cscs_get_GUI_PropertyValue('#numberTasksPerCore');
+    var num_tasks_per_node = _cscs_get_GUI_PropertyValue('#numberOfTasksPerNode');
+    var num_cpus_per_task = _cscs_get_GUI_PropertyValue('#numberOfCpusPerTask');
+
+    var has_hyperthreading = this.hasHyperThreading();
+
+
+    if(num_tasks_per_core != null) {
+        // current_num_threads *= num_tasks_per_core;
+        arrayOfNodeInfo.push('tasks per core');
+    }
+    if(num_tasks_per_node != null) {
+        current_num_threads *= num_tasks_per_node;
+        arrayOfNodeInfo.push('tasks per node');
+    }
+    if(num_cpus_per_task != null) {
+        current_num_threads *= num_cpus_per_task;
+        arrayOfNodeInfo.push('cpus per task');
+    }
+
+    var warning_state = false;
+    if(Number(current_num_threads) < Number(max_num_threads)) {
+        warning_state = true;
+    }
+    element.innerHTML = null;
+
+    if(warning_state) {
+        var alertBox = $('#jobscriptalert');
+        alertBox.show();
+        if(alertBox.hasClass('alert-success') == true) {
+            alertBox.removeClass('alert-success');    
+        }
+        alertBox.addClass('alert-warning');
+
+        element.innerHTML += "<h4>Warning</h4>";
+        element.innerHTML += "You have selected a ";
+        if(Number(arrayOfNodeInfo.length) > 1) {
+            element.innerHTML += "combination of ";
+        } else {
+            element.innerHTML += "number for ";
+        }
+
+        var counter = 0;
+        var size = arrayOfNodeInfo.length;
+        var x, y;
+        for (x in arrayOfNodeInfo) {
+            counter = Number(counter) + 1;
+            element.innerHTML += '<b>' + arrayOfNodeInfo[x] + '</b>';
+            
+            if(counter == (size - 1)) {
+                element.innerHTML += " and ";
+            } else if(counter != size) {
+                element.innerHTML += ", ";
+            }
+        }
+
+        element.innerHTML += " that cannot achieve the maximum potential of the node.";
+        element.innerHTML += " <p>The maximum parallel processes is <b>" + max_num_threads + "</b> but you have selected only <b>" + current_num_threads + "</b>.</p>";
+    } else if (current_num_threads != 1){
+        var alertBox = $('#jobscriptalert');
+        alertBox.show();
+
+        if(alertBox.hasClass('alert-warning') == true) {
+            alertBox.removeClass('alert-warning');    
+        }
+        alertBox.addClass('alert-success');
+
+        element.innerHTML += "<h4>Success</h4>";
+
+        element.innerHTML += "<p>For a hybrid MPI + OpenMP program you have selected: </p>";
+        element.innerHTML += "<p><b>" + num_tasks_per_node + "</b> MPI ranks and <b>" + num_cpus_per_task + "</b> OpenMP threads </p>";
+    } else {
+        var alertBox = $('#jobscriptalert');
+        alertBox.hide();
+    }
+}
+
+Partition.prototype.printJobScript = function(element) {
     element.innerHTML  = "#!/bin/bash -l\n";
 
     var jobname = $('#jobName').val();
@@ -404,20 +531,27 @@ Partition.prototype.print = function(element) {
 
     element.innerHTML += this.getWallTime();
 
-    element.innerHTML += this.getNumNodes();
-    element.innerHTML += this.getNumTasksPerNodes();
-    element.innerHTML += this.getNumCpusPerTask();
-    element.innerHTML += this.getNumTasksPerCore();
-    element.innerHTML += this.getMemPerNode();
-    element.innerHTML += this.getPartition();
-    element.innerHTML += this.getConstraints();
-    element.innerHTML += this.getExclusive();
-    element.innerHTML += this.getMaxNumberOfThreads();
-
+    element.innerHTML += this.printNumNodes();
+    element.innerHTML += this.printNumTasksPerCore();
+    element.innerHTML += this.printNumTasksPerNodes();
+    element.innerHTML += this.printNumCpusPerTask();
+    element.innerHTML += this.printMemPerNode();
+    element.innerHTML += this.printPartition();
+    element.innerHTML += this.printConstraints();
+    element.innerHTML += this.printExclusive();
 
     element.innerHTML += "\n";
-    element.innerHTML += this.getPreCommand();
-    element.innerHTML += this.getExecutable();
+    element.innerHTML += this.printEnvironmentVariables();
+
+    element.innerHTML += "\n";
+    element.innerHTML += this.printPreCommand();
+    element.innerHTML += this.printExecutable();
+};
+
+Partition.prototype.print = function(jobscript, partitionWebSite, jobscriptalert) {
+    this.printPartitionWebSite(partitionWebSite);
+    this.printJobScriptMessage(jobscriptalert);
+    this.printJobScript(jobscript);
 };
 
 var DaintGPUPartition = function(name) {
@@ -440,6 +574,15 @@ var DaintGPUPartition = function(name) {
         "xfer"    : "24:00:00",
         "prepost" : "00:30:00",
         "debug"   : "00:30:00"
+    };
+
+    this.partition_website = {
+        "normal"  : "http://eth-cscs.github.io/getting_started/running_jobs/piz_daint",
+        "low"     : "http://eth-cscs.github.io/getting_started/running_jobs/piz_daint",
+        "high"    : "http://eth-cscs.github.io/getting_started/running_jobs/piz_daint",
+        "xfer"    : "http://user.cscs.ch/storage/data_transfer/internal_transfer/index.html",
+        "prepost" : "MISSING WEBSITE",
+        "debug"   : "MISSING WEBSITE"
     };
 
     this.list_of_partitions = [ "normal", "low", "high", "xfer", "prepost", "debug" ];
@@ -516,6 +659,20 @@ var DaintMCPartition = function(name) {
         "debug"  : '--constraint=mc'
     };
 
+    this.max_num_tasks_per_node = {
+        "normal" : 36,
+        "low"    : 36,
+        "high"   : 36,
+        "debug"  : 36
+    };
+
+    this.max_num_cpus_per_tasks = {
+        "normal" : 36,
+        "low"    : 36,
+        "high"   : 36,
+        "debug"  : 36
+    };
+
 };
 _bindPrototypeMethods(DaintMCPartition, DaintGPUPartition);
 
@@ -528,34 +685,8 @@ var MonchPartition = function(name) {
         largemem : "--partition="
     };
     this.list_of_partitions = [ "normal", "largemem" ];
-
-    this.max_num_tasks_per_node = {
-        "normal" : 72,
-        "low"    : 72,
-        "high"   : 72,
-        "debug"  : 72
-    };
-
-    this.max_num_cpus_per_tasks = {
-        "normal" : 72,
-        "low"    : 72,
-        "high"   : 72,
-        "debug"  : 72
-    };
 };
 _bindPrototypeMethods(MonchPartition, Partition);
-//     $('#selectPartition').append('<option>compute</option>');
-//     $('#selectPartition').append('<option>largemem</option>');
-//     $('#selectPartition').append('<option>hugemem</option>');
-//     $('#selectPartition').append('<option>all</option>');
-//     $('#selectPartition').append('<option>dphys_compute</option>');
-//     $('#selectPartition').append('<option>dphys_largemem</option>');
-//     $('#selectPartition').append('<option>dphys_hugemem</option>');
-//     $('#selectPartition').append('<option>dphys_largemem_wk</option>');
-//     $('#selectPartition').append('<option>dphys_hugemem_wk</option>');
-//     $('#selectPartition').append('<option>fichtner_compute</option>');
-//     $('#selectPartition').append('<option>parrinello_compute</option>');
-//     $('#selectPartition').append('<option>spaldin_compute</option>');
 
 var LeonePartition = function(name) {
     Partition.call(this);
@@ -636,7 +767,8 @@ function cscs_populate_form() {
 
 function cscs_print_jobscript() {
     document.getElementById("jobscript").innerHTML = null;
-    __cscs_partition.print(document.getElementById("jobscript"));
+    $('#jobscriptalert').hide();
+    __cscs_partition.print(document.getElementById("jobscript"), document.getElementById("partitionwebsite"), document.getElementById("jobscriptalert"));
     return true;
 }
 
@@ -682,183 +814,58 @@ function cscs_validate_minutes() {
 }
 
 function cscs_validate_num_tasks_per_core() {
-    var num_tasks_per_core = $('#numberTasksPerCore').val();
-
+    var obj = $('#numberTasksPerCore');
+    var num_tasks_per_core = obj.val();
     var has_hyperthreading = __cscs_partition.hasHyperThreading();
 
     if (has_hyperthreading == false) {
-        $('#numberTasksPerCore').val("max", 1);
-        $('#numberTasksPerCore').val(1);
+        obj.val("max", 1);
+        obj.val(1);
+        __cscs_partition.setNumTasksPerNodeAndNumCpusPerNodeValues(1);
     } else {
         var value = __cscs_partition.getValue(__cscs_partition.max_num_tasks_per_core);
-        if (Number(value) > num_tasks_per_core) {
-            $('#numberTasksPerCore').val("max", value);
-            $('#numberTasksPerCore').val(value);
+        if (Number(num_tasks_per_core) > Number(value)) {
+            obj.val("max", value);
+            obj.val(value);
+            __cscs_partition.setNumTasksPerNodeAndNumCpusPerNodeValues(value);
         }
     }
     return true;
 }
 
+function cscs_validate_num_tasks_per_node() {
+    var obj = $('#numberOfTasksPerNode');
+    var num_tasks_per_node = _cscs_get_GUI_PropertyValue('#numberOfTasksPerNode');
+    var max_threads = __cscs_partition.getMaxNumberOfThreads();
+    var num_cpus_per_task = _cscs_get_GUI_PropertyValue('#numberOfCpusPerTask');
 
+    if(num_cpus_per_task == null) {
+        num_cpus_per_task = 1;
+    }
 
+    var value_allowed_at_this_point = Math.floor(Number(max_threads) / Number(num_cpus_per_task));
+    if (Number(num_tasks_per_node) > Number(value_allowed_at_this_point)) {
+        obj.val("max", value_allowed_at_this_point);
+        obj.val(value_allowed_at_this_point);
+    }
+    return true;
+}
 
+function cscs_validate_num_cpus_per_task() {
+    var obj = $('#numberOfCpusPerTask');
+    var num_cpus_per_task = _cscs_get_GUI_PropertyValue('#numberOfCpusPerTask');
+    var max_threads = __cscs_partition.getMaxNumberOfThreads();
+    var num_tasks_per_node = _cscs_get_GUI_PropertyValue('#numberOfTasksPerNode');
 
+    if(num_tasks_per_node == null) {
+        num_tasks_per_node = 1;
+    }
 
-// function cscs_validate_form() {
-//  $('#selectMachine').change(function(){
-//      if ($(this).val() == 'Daint') {
-//          _cscs_display_daint_partitions();
-//      } else if ($(this).val() == 'Leone') {
-//          _cscs_display_leone_partitions();
-//      } else if ($(this).val() == 'Monch') {
-//          _cscs_display_monch_partitions();
-//      } else if ($(this).val() == 'Tave') {
-//          _cscs_display_tave_partitions();
-//      }
-//  });
-//  $("#submit_button").click(function() {
-//    _cscs_print_job_script();
-//  });
-// }
-
-// function _cscs_clean_partitions() {
-//     document.getElementById("selectPartition").innerHTML = null;
-// }
-
-
-// function _cscs_display_daint_partitions() {
-//     _cscs_clean_partitions();
-//     $('#selectPartition').append('<option>gpu</option>');
-//     $('#selectPartition').append('<option>mc</option>');
-//     $('#selectPartition').append('<option>debug</option>');
-//     $('#selectPartition').append('<option>low</option>');
-//     $('#selectPartition').append('<option>high</option>');
-//     $('#selectPartition').append('<option>large</option>');
-//     $('#selectPartition').append('<option>prepost</option>');
-//     $('#selectPartition').append('<option>xfer</option>');
-
-//     _cscs_number_of_nodes_dict = {
-//         'gpu'     : 2400,
-//         'mc'      : 2400,
-//         'debug'   : 4,
-//         'low'     : 2400,
-//         'high'    : 2400,
-//         'large'   : 4549,
-//         'prepost' : 1,
-//         'xfer'    : 1,
-//     }
-//     _cscs_max_wall_time_dict = {
-//         'normal'  : 2400,
-//         'debug'   : 4,
-//         'low'     : 2400,
-//         'high'    : 2400,
-//         'large'   : 4549,
-//         'prepost' : 1,
-//         'xfer'    : 1,
-//     }
-// }
-
-// function _cscs_display_leone_partitions() {
-//     _cscs_clean_partitions();
-//     $('#selectPartition').append('<option>normal</option>');
-//     $('#selectPartition').append('<option>debug</option>');
-//     $('#selectPartition').append('<option>longrun</option>');
-
-//     _cscs_number_of_nodes_dict = {
-//         'normal'  : 2,
-//         'debug'   : 2,
-//         'longrun' : 1,
-//     }
-// }
-
-// function _cscs_display_monch_partitions() {
-//     _cscs_clean_partitions();
-//     $('#selectPartition').append('<option>compute</option>');
-//     $('#selectPartition').append('<option>largemem</option>');
-//     $('#selectPartition').append('<option>hugemem</option>');
-//     $('#selectPartition').append('<option>all</option>');
-//     $('#selectPartition').append('<option>dphys_compute</option>');
-//     $('#selectPartition').append('<option>dphys_largemem</option>');
-//     $('#selectPartition').append('<option>dphys_hugemem</option>');
-//     $('#selectPartition').append('<option>dphys_largemem_wk</option>');
-//     $('#selectPartition').append('<option>dphys_hugemem_wk</option>');
-//     $('#selectPartition').append('<option>fichtner_compute</option>');
-//     $('#selectPartition').append('<option>parrinello_compute</option>');
-//     $('#selectPartition').append('<option>spaldin_compute</option>');
-//     $('#selectPartition').append('<option></option>');
-
-//     _cscs_number_of_nodes_dict = {
-//         'compute'            : 312,
-//         'largemem'           : 40,
-//         'hugemem'            : 24,
-//         'all'                : 376,
-//         'dphys_compute'      : 310,
-//         'dphys_largemem'     : 40,
-//         'dphys_hugemem'      : 24,
-//         'dphys_largemem_wk'  : 12,
-//         'dphys_hugemem_wk'   : 8,
-//         'fichtner_compute'   : 310,
-//         'parrinello_compute' : 310,
-//         'spaldin_compute'    : 310,
-//         'express_compute'    : 2,
-//     }
-// }
-
-// function _cscs_display_tave_partitions() {
-//     _cscs_clean_partitions();
-//     $('#selectPartition').append('<option>normal</option>');
-//     $('#selectPartition').append('<option>debug</option>');
-//     $('#selectPartition').append('<option>low</option>');
-//     $('#selectPartition').append('<option>high</option>');
-//     $('#selectPartition').append('<option>large</option>');
-//     $('#selectPartition').append('<option>prepost</option>');
-//     $('#selectPartition').append('<option>xfer</option>');
-
-//     _cscs_number_of_nodes_dict = {
-//         'normal'  : 512,
-//         'debug'   : 512,
-//         'low'     : 512,
-//         'high'    : 512,
-//         'large'   : 512,
-//         'prepost' : 512,
-//         'xfer'    : 512,
-//     }
-// }
-
-// function _cscs_print_job_script() {
-//     document.getElementById("jobscript").innerHTML = null;
-//     document.getElementById("jobscript").innerHTML += "#!/bin/bash -l\n";
-//     document.getElementById("jobscript").innerHTML += "$SBATCH --nodes=" + $("#numberOfNodes").val() + " \n";
-//     document.getElementById("jobscript").innerHTML += "$SBATCH --ntasks-per-node=" + $("#numberOfTasksPerNode").val() + " \n";
-//     document.getElementById("jobscript").innerHTML += "$SBATCH --cpus-per-task=" + $("#numberOfCpusPerTasks").val() + " \n";
-//     if ($("#HyperThreading").prop("checked") == false) {
-//         document.getElementById("jobscript").innerHTML += "$SBATCH --nomultithread\n";
-//         document.getElementById("jobscript").innerHTML += "$SBATCH --nomultithread\n";
-//     }
-//     if ($("#ShareNode").prop("checked") == false) {
-//         document.getElementById("jobscript").innerHTML += "$SBATCH --exclusive\n";
-//     }
-
-
-//         // self.num_tasks_per_node = None
-//         // self.num_gpus_per_node = 0
-//         // self.num_cpus_per_task = None
-//         // self.num_tasks_per_core = None
-//         // self.num_tasks_per_socket = None
-//         // self.use_multithreading = False
-
-//  //  1 #!/bin/bash -l
-//  //  2 #SBATCH --job-name="score_p_C_daint_gpu_PrgEnv-cray"
-//  //  3 #SBATCH --time=0:10:0
-//  //  4 #SBATCH --ntasks=3
-//  //  5 #SBATCH --ntasks-per-node=3
-//  //  6 #SBATCH --cpus-per-task=4
-//  //  7 #SBATCH --exclusive
-//  //  8 #SBATCH --hint=nomultithread
-//  //  9 #SBATCH --output="/users/hvictor/Work/score-p/PyRegression/regstage/gpu/score_p_C/PrgEnv-cray/score_p_C.out"
-//  // 10 #SBATCH --error="/users/hvictor/Work/score-p/PyRegression/regstage/gpu/score_p_C/PrgEnv-cray/score_p_C.err"
-//  // 11 #SBATCH --constraint=gpu
-
-
-// }
+    var value_allowed_at_this_point = Math.floor(Number(max_threads) / Number(num_tasks_per_node));
+    if (Number(num_cpus_per_task) > Number(value_allowed_at_this_point)) {
+        obj.val("max", value_allowed_at_this_point);
+        obj.val(value_allowed_at_this_point);
+    }
+    return true;
+}
 
