@@ -23,3 +23,6 @@ Scientific Computing
 # [Debugging tools](https://eth-cscs.github.io/scientific_computing/debugging_tools)
 # [EasyBuild framework](https://eth-cscs.github.io/scientific_computing/easybuild_framework)
 # [Performance tools](https://eth-cscs.github.io/scientific_computing/performance_tools)
+## [CRAY performance tools](https://eth-cscs.github.io/scientific_computing/performance_tools/craypat/)
+## [VI-HPS performance tools](https://eth-cscs.github.io/scientific_computing/performance_tools/vihps/)
+## [NVIDIA performance tools](https://eth-cscs.github.io/scientific_computing/performance_tools/nvidia/)
