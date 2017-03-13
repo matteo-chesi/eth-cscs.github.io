@@ -12,7 +12,7 @@ the following tools from NVIDIA are supported:
 
 First collect performance data on the compute node using nvprof:
 
-> module load craype-accel-nvidia60 
+> module load craype-accel-nvidia60   
 > unset COMPUTE_PROFILE  
 > export PMI_NO_FORK=1  
 > srun -C gpu -n1 nvprof -o nvprof.output.%h.%p myexe  
